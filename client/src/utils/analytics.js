@@ -3,7 +3,7 @@ let isInitialized = false;
 export const initGA = () => {
   if (!isInitialized) {
     const script = document.createElement('script');
-    script.src = `https://www.googletagmanager.com/gtag/js?id=G-1LMY551VWY`;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=G-P58JQNJX3K`;
     script.async = true;
     document.head.appendChild(script);
 
@@ -12,7 +12,7 @@ export const initGA = () => {
       function gtag(){window.dataLayer.push(arguments);}
       window.gtag = gtag;
       gtag('js', new Date());
-      gtag('config', 'G-1LMY551VWY');
+      gtag('config', 'G-P58JQNJX3K');
       isInitialized = true;
     };
   }

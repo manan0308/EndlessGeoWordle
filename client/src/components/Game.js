@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { trackEvent } from '../utils/analytics';
+import { trackEvent, initGA } from '../utils/analytics';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
@@ -13,15 +13,8 @@ import WelcomeModal from './WelcomeModal';
 import { logError } from '../services/logService';
 import { validateWord } from '../utils/wordValidator';
 
-const MAX_GUESSES = 6;
 
-const safeGtag = (...args) => {
-  if (window.gtag && typeof window.gtag === 'function') {
-    window.gtag(...args);
-  } else {
-    console.warn('Google Analytics not available');
-  }
-};
+const MAX_GUESSES = 6;
 
 const Game = () => {
   const [userId, setUserId] = useState(localStorage.getItem('geowordleUserId') || '');
@@ -66,7 +59,7 @@ const Game = () => {
         wordsPlayed: prevStats.wordsPlayed + 1
       }));
 
-      safeGtag('event', 'new_word', {
+      trackEvent('new_word', {
         'event_category': 'Game',
         'event_label': 'New Word Fetched'
       });
@@ -121,7 +114,7 @@ const Game = () => {
       }));
 
       // Google Analytics event
-      window.gtag('event', 'game_completed', {
+      trackEvent('game_completed', {
         'event_category': 'Game',
         'event_label': won ? 'Won' : 'Lost',
         'value': attempts
@@ -202,7 +195,7 @@ const Game = () => {
 
         setCurrentGuess('');
 
-        window.gtag('event', 'guess_made', {
+        trackEvent('guess_made', {
           'event_category': 'Game',
           'event_label': 'Guess Made',
           'value': currentGuessIndex + 1
@@ -220,13 +213,14 @@ const Game = () => {
   }, [answer, currentGuess, gameOver, guesses, usedLetters, handleGameOver]);
 
   useEffect(() => {
+    initGA();
     fetchNewWord();
     loadStats();
     
     const timer = setTimeout(() => {
       trackEvent('game_start', { 'event_category': 'Game', 'event_label': 'New Game Started' });
     }, 1000);
-
+  
     return () => clearTimeout(timer);
   }, [fetchNewWord, loadStats]);
 
@@ -259,7 +253,7 @@ const Game = () => {
       navigator.clipboard.writeText(shareText).then(() => {
         setToast({ message: 'Results copied to clipboard!', type: 'success' });
         // Google Analytics event
-        window.gtag('event', 'share_results', {
+        trackEvent('share_results', {
           'event_category': 'Game',
           'event_label': 'Results Shared'
         });
@@ -291,7 +285,7 @@ const Game = () => {
   const playNextWord = () => {
     fetchNewWord();
     // Google Analytics event
-    window.gtag('event', 'play_next_word', {
+    trackEvent('play_next_word', {
       'event_category': 'Game',
       'event_label': 'Next Word Started'
     });
