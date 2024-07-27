@@ -26,16 +26,17 @@ const RulesModal = ({ show, onClose, darkMode, wordLength }) => {
     >
       <div className={`p-6 rounded-lg max-w-md w-full ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">How to Play</h2>
+          <h2 className="text-2xl font-bold">How to Play Infinite GeoWordle</h2>
           <button onClick={handleClose} className="p-1">
             <X size={24} className={darkMode ? 'text-white' : 'text-black'} />
           </button>
         </div>
         <ul className="list-disc list-inside space-y-2 mb-4">
           <li>Guess the GeoWordle in 6 tries.</li>
-          <li>Each guess must be a valid {wordLength}-letter word. Your objective is to guess the city name.</li>
-          <li>You can use any English word or geographical name to help you get closer to the final city.</li>
+          <li>Each guess must be a valid {wordLength}-letter word. Your objective is to guess the city or country name.</li>
+          <li>You can use any English word or geographical name to help you get closer to the final location.</li>
           <li>The color of the tiles will change to show how close your guess was to the word.</li>
+          <li>After each game, a new location is automatically generated for endless play!</li>
         </ul>
         <div className="space-y-2 mb-4">
           <div className="flex items-center">
@@ -68,7 +69,7 @@ const RulesModal = ({ show, onClose, darkMode, wordLength }) => {
             ))}
           </div>
         </div>
-        <p>A new GeoWordle will be available each day!</p>
+        <p>Enjoy playing GeoWordle infinitely!</p>
       </div>
     </motion.div>
   );
