@@ -3,7 +3,7 @@ import { trackEvent, initGA } from '../utils/analytics';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Globe, Moon, Sun, Share2, Info, BarChart, HelpCircle } from 'lucide-react';
+import { Globe, Moon, Sun, Share2, Info, BarChart, HelpCircle, Infinity } from 'lucide-react';
 import Keyboard from './Keyboard';
 import StatsModal from './StatsModal';
 import RulesModal from './RulesModal';
@@ -33,7 +33,7 @@ const Game = () => {
   const [stats, setStats] = useState({ played: 0, won: 0, streak: 0, maxStreak: 0, guesses: {} });
   const [sessionStats, setSessionStats] = useState({ wordsPlayed: 0, hintsUsed: 0 });
   const [isLoading, setIsLoading] = useState(true);
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
   const invisibleInputRef = useRef(null);
   
 
@@ -216,6 +216,12 @@ const Game = () => {
     initGA();
     fetchNewWord();
     loadStats();
+
+    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
+    if (!hasSeenWelcome) {
+      setShowWelcome(true);
+      localStorage.setItem('hasSeenWelcome', 'true');
+    }
     
     const timer = setTimeout(() => {
       trackEvent('game_start', { 'event_category': 'Game', 'event_label': 'New Game Started' });
@@ -309,7 +315,9 @@ const Game = () => {
           <button onClick={() => setShowHints(true)} className="p-1 sm:p-2 ml-2"><HelpCircle size={20} /></button>
         </div>
         <h1 className="text-2xl sm:text-4xl font-bold flex items-center">
-          <Globe className="mr-1 sm:mr-2" size={24} /> GeoWordle
+          <Globe className="mr-1 sm:mr-2" size={24} />
+          GeoWordle
+          <Infinity className="ml-1 sm:ml-2" size={24} />
         </h1>
         <div className="flex items-center">
           <button onClick={() => setDarkMode(!darkMode)} className="p-1 sm:p-2 mr-2">
